@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <div class="dailymotion" id="player"></div>
+</body>
+</html>
+
+
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        background-color: black;
+    }
+
+    .dailymotion {
+        position: absolute;
+        transition: all ease 1s;
+    }
+</style>
+
+<script src="https://api.dmcdn.net/all.js"></script>
+<script>
+    var player =
+        DM.player(document.getElementById("player"),
+            {
+                video: getParameterByName("videoid"),
+                width: "100%",
+                height: "100%",
+                params: {
+                    start: getParameterByName("starttime"),
+                    mute: false,
+                    autoplay: true,
+                    fullscreen: false,
+                    autoplay_next: false,
+                    queue: false,
+                    logo: false
+                }
+            });
+    player.addEventListener('play', function (event) {
+        //player.style.transform = "scale(1.0)";
+        window.location.href = "uniwebview://Player_Play";
+    });
+    player.addEventListener('pause', function (event) {
+            window.location.href = "uniwebview://Player_Pause";
+    });
+    player.addEventListener('end', function (event) {
+            window.location.href = "uniwebview://Player_End";
+    });
+    
+    player.addEventListener('timeupdate', function (event) {
+        window.location.href = "uniwebview://Video_Update?playtime=" + player.currentTime;
+    });
+
+    function PlayVideo(videoid) {
+        player.load({
+            video: videoid,
+            params: {
+                mute: false,
+                autoplay: true,
+                fullscreen: false,
+                autoplay_next: false,
+                queue: false,
+                logo: false,
+            }
+        });
+    }
+
+    function getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+
+    }
+
+    function CloseStep() {
+
+        if (player.paused == false) {
+            player.pause();
+        }
+        else {
+            window.location.href = "uniwebview://Player_Close";
+        }
+    }
+</script>
