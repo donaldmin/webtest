@@ -78,12 +78,10 @@
 
     }
 
-    function CloseStep() {
-
-        if (player.paused == false) {
-            player.pause();
-        }
-        else {
+    function CloseStep() 
+    {
+        if(player.fullscreen == false)
+        {
             window.location.href = "uniwebview://Player_Close";
         }
     }
